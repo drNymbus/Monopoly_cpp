@@ -14,3 +14,7 @@ std::string command::player_name(void) {
 	std::cin >> name; std::cin.ignore();
 	return name;
 }
+
+void command::pick_a_card();
+void command::roll_dice();
+void command::upgrade();

@@ -20,6 +20,18 @@ Cell::Cell(unsigned int pos, std::string name, Type t, int rank) {
     }
 }
 
+/*
+ * \param :
+ * \descprt :
+ * \return :
+ */
+bool Cell::upgrade(void) {
+    if (Cell::Level+1 > 3) return false;
+    Cell::Level++;
+    Cell::vUpgrade = Cell::Level*100;
+    return true;
+}
+
 /*****PLAYER*******************************************************************/
 
 /*
@@ -65,13 +77,14 @@ bool Player::double_dice() {
  * \descprt :
  * \return :
  */
-void Player::pay(Player p, int sum) {
+bool Player::pay(Player p, int sum) {
     if (Player::Money - sum > Player::Money) {
         std::cout << "Insufficient money." << std::endl;
-        return;
+        return false;
     }
     p.Money += sum;
     Player::Money -= sum;
+    return true;
 }
 
 /*
@@ -177,6 +190,7 @@ void Board::initialize_players(std::vector<Player> p) {
     for (int i = 0; i < nbPlayers; i++) {
         std::cout << i+1 << ". ";
         Player actual_p;
+        actual_p.Id = i;
         actual_p.Name = command::player_name();
         std::cout << " [DONE]" << std::endl;
     }

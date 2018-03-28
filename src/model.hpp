@@ -16,26 +16,30 @@ namespace Board {
             Type CellType;
             int Rank;
             std::string Name;
-            unsigned int Value, vMortgage;
+            unsigned int Value, Level = 0;
+            unsigned int vMortgage, vUpgrade = 0;
             bool bMortgage = false;
             unsigned int Rebuy;
 
             Cell(unsigned int pos, std::string name, Type t, int rank);
+            bool upgrade();
     };
 
     class Player {
         public:
+            int Id;
             std::string Name;
             //int Color;
             unsigned int Money = 2500;
             std::vector<Cell> Buildings;
             unsigned int Position = 0;
+            unsigned int JailTime = 0;
             int Dice1, Dice2;
 
             void mortgage(Cell c);
             void roll_dice();
             bool double_dice();
-            void pay(Player p, int sum);
+            bool pay(Player p, int sum);
             void buy(Cell c);
             bool do_possess(Cell c);
     };

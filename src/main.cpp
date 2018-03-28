@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
 
             case TURN:
                 p_turn = players[turn];
-                p_turn.roll_dice();
+                command::roll_dice();
                 if (p_turn.double_dice()) {
                     turn--;
                 }        
@@ -39,14 +39,29 @@ int main(int argc, char** argv) {
 
             case ACTION:
                 Cell actual_cell = board_game[players[turn].Position];
-                switch (actual_cell.CellType) {
-                    case BUILDING:
+                if (!actual_cell.bMortgage) {
+                    p_turn = players[turn];
+                    switch (actual_cell.CellType) {
+                        case BUILDING:
+                            std::vector<Player>::iterator i = players.begin();
+                            for(; i != players.end(); i++) {
+                                if ((*i).do_possess(actual_cell)) {
+                                    if ((*i).Id != p_turn.Id) {
+                                        int due = actual_cell.Value/3 + actual_cell.vUpgrade;
+                                        p_turn.pay((*i), due);
+                                    } else {
+                                        command::upgrade()
+                                    }
+                                }
+                            }
+                        break;
 
-                    break;
-                    case BONUS:
-                    break;
-                    case JAIL:
-                    break;
+                        case BONUS:
+                            command::pick_a_card();
+                        break;
+                        case JAIL:
+                        break;
+                    }
                 }
                 turn++;
             break;
