@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -g -Wall
+CFLAGS = -g -Wall -std=c++11
 
 SRC = $(wildcard src/*.c)
 OBJ = $(SRC:.c=obj/.o)
@@ -17,7 +17,7 @@ $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 Monopoly : $(OBJECTS)
-	$(CC) $(CFLAGS) $(OBJECTS) -o $(EXEC_FILE)
+	$(CC) $(CFLAGS) $(OBJECTS) -o Monopoly
 
 .PHONY: clean
 clean:

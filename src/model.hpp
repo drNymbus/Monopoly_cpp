@@ -1,36 +1,51 @@
+#include <random>
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <string>
 #include <vector>
 
-#define ON  true
-#define OFF false
+#include "command.hpp"
 
-typedef enum {START, BUILDING, BONUS, JAIL} Type;
+typedef enum {BUILDING, BONUS, JAIL} Type;
 
-class Cell {
-    public:
-        Type CellType;
-        int Rank;
-        std::string Name;
-        unsigned int Value, Mortgage;
-        unsigned int Rebuy;
-        Player WhoPossess = NULL;
+namespace Board {
+    unsigned int NB_LAND = 0;
 
-    void action(void);
-    bool is_possessed(Cell c);
-};
+    class Cell {
+        public:
+            unsigned int Position;
+            Type CellType;
+            int Rank;
+            std::string Name;
+            unsigned int Value, vMortgage;
+            bool bMortgage = false;
+            unsigned int Rebuy;
 
-class Player {
-    public:
-        std::string Name;
-        unsigned int Money = 0;
-        unsigned int NbBuildings = 0;
-        std::vector<Cell> Buildings;
-        unsigned int Position;
-        int dice1, dice2;
+            Cell(unsigned int pos, std::string name, Type t, int rank);
+    };
 
-        void roll_dice();
-        void pay(Player p, int sum);
-        void buy(Cell c);
-        bool do_possess(Cell c);
+    class Player {
+        public:
+            std::string Name;
+            //int Color;
+            unsigned int Money = 2500;
+            std::vector<Cell> Buildings;
+            unsigned int Position = 0;
+            int Dice1, Dice2;
+
+            void mortgage(Cell c);
+            void roll_dice();
+            bool double_dice();
+            void move();
+            void pay(Player p, int sum);
+            void buy(Cell c);
+            bool do_possess(Cell c);
+    };
+
+    Cell str_to_cell(std::string str);
+    void shuffle_players(std::vector<Player> p);
+    void create_board(std::vector<Cell> b, std::string filename);
+    void initialize_players(std::vector<Player> p);
+    bool is_game_over(std::vector<Cell> b, std::vector<Player> p);
 };
