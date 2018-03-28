@@ -10,8 +10,6 @@
 typedef enum {BUILDING, BONUS, JAIL} Type;
 
 namespace Board {
-    unsigned int NB_LAND = 0;
-
     class Cell {
         public:
             unsigned int Position;
@@ -37,7 +35,6 @@ namespace Board {
             void mortgage(Cell c);
             void roll_dice();
             bool double_dice();
-            void move();
             void pay(Player p, int sum);
             void buy(Cell c);
             bool do_possess(Cell c);

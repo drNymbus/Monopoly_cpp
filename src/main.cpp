@@ -5,14 +5,13 @@ typedef enum {INIT, TURN, ACTION} State;
 
 int main(int argc, char** argv) {
     State game_state = INIT;
-    bool end_game = false;
     std::string board_txt;
 
     std::vector<Cell> board_game;
     std::vector<Player> players;
     unsigned int turn;
 
-    while (!end_game) {
+    while (!is_game_over(board_game, players)) {
         if (turn > players.size()) turn = 0;
         Player p_turn;
 
@@ -29,8 +28,13 @@ int main(int argc, char** argv) {
                 p_turn.roll_dice();
                 if (p_turn.double_dice()) {
                     turn--;
+                }        
+                for (int i = p_turn.Dice1 + p_turn.Dice2; i >= 0; i--) {
+                    if (p_turn.Position > board_game.size()) p_turn.Position = 0;
+                    if (p_turn.Position == 0) p_turn.Money += 200;
+                    p_turn.Position++;
                 }
-                p_turn.move();
+                if (!p_turn.Position) p_turn.Money += 300;
             break;
 
             case ACTION:

@@ -65,21 +65,6 @@ bool Player::double_dice() {
  * \descprt :
  * \return :
  */
-void Player::move() {
-    int i = Player::Dice1 + Player::Dice2;
-    for (; i >= 0; i--) {
-        if (Player::Position > Board::NB_LAND) Player::Position = 0;
-        if (Player::Position == 0) Player::Money += 200;
-        Player::Position++;
-    }
-    if (!Player::Position) Player::Money += 300;
-}
-
-/*
- * \param :
- * \descprt :
- * \return :
- */
 void Player::pay(Player p, int sum) {
     if (Player::Money - sum > Player::Money) {
         std::cout << "Insufficient money." << std::endl;
@@ -172,9 +157,6 @@ void Board::create_board(std::vector<Cell> b, std::string filename) {
     std::ifstream file(filename, std::ifstream::in);
     std::string line;
     if (file.is_open()) {
-        getline(file, line);
-        Board::NB_LAND = std::stoi(line);
-
         while(getline(file, line)) {
             Cell tmp = str_to_cell(line);
             b.push_back(tmp);
