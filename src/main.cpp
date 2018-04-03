@@ -26,7 +26,8 @@ int main(int argc, char** argv) {
 
             case TURN: {
                 p_turn = players[turn];
-                command::roll_dice();
+                command::cell_management(p_turn);
+                command::roll_dice(p_turn);
                 if (p_turn.double_dice()) {
                     turn--;
                 }
@@ -42,7 +43,6 @@ int main(int argc, char** argv) {
             }
 
             case ACTION:
-                command::cell_management(Player p);
                 Cell actual_cell = board_game[players[turn].Position];
                 if (!actual_cell.bMortgage) {
                     p_turn = players[turn];
@@ -75,6 +75,7 @@ int main(int argc, char** argv) {
                         break;
                     }
                 }
+                command::cell_management(Player p);
                 turn++;
             break;
         }

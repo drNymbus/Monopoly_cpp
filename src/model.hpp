@@ -5,13 +5,13 @@
 #include <string>
 #include <vector>
 
-#include "command.hpp"
-
 #define MAX_CELL_RANK 10
 
 typedef enum {BUILDING, BONUS, JAIL} Type;
-typedef enum {FREE, IN_JAIL, VISIT} State_p;
-typedef enum {JAIL_FREE, TAXE_FREE};
+typedef enum {FREE, IN_JAIL, VISIT} StatePlayer;
+
+#define NB_CARD 3
+typedef enum {JAIL_FREE, TAX_FREE, GO_JAIL} CardType;
 
 namespace Board {
     class Cell {
@@ -35,13 +35,14 @@ namespace Board {
             int Id;
             std::string Name;
             //int Color;
-            State_p Status;
+            StatePlayer Status;
             unsigned int Money = 2500;
             std::vector<Cell> Buildings;
             unsigned int NbMonopole = 0;
             unsigned int Position = 0;
             unsigned int JailTime = 0;
             int Dice1, Dice2;
+            std::vector<CardType> Cards;
 
             void mortgage(Cell c);
             void roll_dice();

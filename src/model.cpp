@@ -195,25 +195,6 @@ void Board::create_board(std::vector<Cell> b, std::string filename) {
 }
 
 /*
- * \param : vector<Player> p to be filled
- * \brief : Fill the classes Player of the vector,
- *          the vector passes in argument need to be initialized with empy classes Player
- *          asking the name of the players, (and their skin ...plus tard ?...)
- * \return : void
- */
-void Board::initialize_players(std::vector<Player> p) {
-    int nbPlayers = command::nb_players();
-    std::cout << "Enter your names :" << std::endl;
-    for (int i = 0; i < nbPlayers; i++) {
-        std::cout << i+1 << ". ";
-        Player actual_p;
-        actual_p.Id = i;
-        actual_p.Name = command::player_name();
-        std::cout << " [DONE]" << std::endl;
-    }
-}
-
-/*
  * \param : vector<Cell> b the board_game, vector<Player> p all the players
  * \brief : PAS FINI faudrait redefinir les conditions de victoire
  *           en fonction du mode ça pourrait etre cool
