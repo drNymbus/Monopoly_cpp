@@ -5,7 +5,7 @@ using namespace Board;
 
 /*
  * \param :
- * \descprt :
+ * \descprt : Cell class constructor. no comment.
  * \return :
  */
 Cell::Cell(unsigned int pos, std::string name, Type t, int rank) {
@@ -21,9 +21,9 @@ Cell::Cell(unsigned int pos, std::string name, Type t, int rank) {
 }
 
 /*
- * \param :
- * \descprt :
- * \return :
+ * \param : void
+ * \descprt : upgrade the cell
+ * \return : bool
  */
 bool Cell::upgrade(void) {
     if (Cell::Level+1 > 3) return false;
@@ -209,4 +209,3 @@ bool Board::is_game_over(std::vector<Cell> b, std::vector<Player> p) {
     }
     return false;
 }
-
