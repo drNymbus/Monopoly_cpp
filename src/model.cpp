@@ -5,7 +5,7 @@ using namespace Board;
 
 /*
  * \param :
- * \descprt : Cell class constructor. no comment.
+ * \brief : Cell class constructor. no comment.
  * \return :
  */
 Cell::Cell(unsigned int pos, std::string name, Type t, int rank) {
@@ -22,8 +22,8 @@ Cell::Cell(unsigned int pos, std::string name, Type t, int rank) {
 
 /*
  * \param : void
- * \descprt : upgrade the cell
- * \return : bool
+ * \brief : upgrade the cell
+ * \return : returns true if the cell has been upgraded, false otherwise
  */
 bool Cell::upgrade(void) {
     if (Cell::Level+1 > 3) return false;
@@ -35,9 +35,10 @@ bool Cell::upgrade(void) {
 /*****PLAYER*******************************************************************/
 
 /*
- * \param :
- * \descprt :
- * \return :
+ * \param : Cell c the building to mortgage
+ * \brief : pass the cell into a mortgage state, while giving money
+ *          to the player mortgaging it
+ * \return : true if the mortgage was successful, false if not
  */
 void Player::mortgage(Cell c) {
     if (!Player::do_possess(c) || c.bMortgage) {
@@ -52,9 +53,9 @@ void Player::mortgage(Cell c) {
 }
 
 /*
- * \param :
- * \descprt :
- * \return :
+ * \param : void
+ * \brief : reaffecting new value to dices's player (range 1, 6)
+ * \return : void
  */
 void Player::roll_dice() {
     std::random_device rd;
@@ -64,18 +65,19 @@ void Player::roll_dice() {
 }
 
 /*
- * \param :
- * \descprt :
- * \return :
+ * \param : void
+ * \brief : check if the dices's value are equals
+ * \return : bool
  */
 bool Player::double_dice() {
     return (Player::Dice1 == Player::Dice2);
 }
 
 /*
- * \param :
- * \descprt :
- * \return :
+ * \param : Player p to pay, the sum to pay
+ * \brief : pay the player p, in case the player does not have any money
+ *          the payment doesn't take place
+ * \return : true if the player p has receive the correct amount of money
  */
 bool Player::pay(Player p, int sum) {
     if (Player::Money - sum > Player::Money) {
@@ -88,9 +90,9 @@ bool Player::pay(Player p, int sum) {
 }
 
 /*
- * \param :
- * \descprt :
- * \return :
+ * \param : Cell c
+ * \brief : Check if the cell c is possessed by the player
+ * \return : true if the cell is possessed by the player, false if not
  */
 bool Player::do_possess(Cell c) {
     std::vector<Cell>::iterator i = Player::Buildings.begin();
@@ -102,23 +104,36 @@ bool Player::do_possess(Cell c) {
 }
 
 /*
- * \param :
- * \descprt :
- * \return :
+ * \param : Cell c to buy
+ * \brief : add the cell into the player's buildings
+ *          while redefining the number of monopole possessed
+ *          (at least three cells of the same rank)
+ * \return : void
  */
 void Player::buy(Cell c) {
     Player::Money -= c.Value;
     Player::Buildings.push_back(c);
+
+    int nb_monopole = 0, count[MAX_CELL_RANK];
+    for (int i=0; i < MAX_CELL_RANK; i++) count[i] = 0;
+
+    std::vector<Cell>::iterator i = Player::Buildings.begin();
+    for (; i != Player::Buildings.end(); i++) count[(*i).Rank]++;
+    for (int i = 0; i < MAX_CELL_RANK; i++) {
+        if (count[i] > 2) nb_monopole++;
+    }
+    Player::NbMonopole = nb_monopole;
 }
 
 /*****Board::functions*********************************************************/
 
 /*
- * \param :
- * \descprt :
- * \return :
+ * \param : String s containing data cell
+ *          string scheme : CELL_POS CELL_NAME CELL_TYPE CELL_RANK
+ * \brief : convert the data cell string into a cell class
+ * \return : the cell created from the string
  */
-Cell Board::str_to_cell(std::string str) {
+ Cell Board::str_to_cell(std::string str) {
     int i = 0;
     unsigned int pos, t, rank;
     std::string name;
@@ -145,9 +160,9 @@ Cell Board::str_to_cell(std::string str) {
 }
 
 /*
- * \param :
- * \descprt :
- * \return :
+ * \param : vector<Player> p to shuffle
+ * \brief : reaffecting the position of the class player in the vector randomly
+ * \return : void
  */
 void Board::shuffle_players(std::vector<Player> p) {
     std::random_device rd;
@@ -162,9 +177,9 @@ void Board::shuffle_players(std::vector<Player> p) {
 }
 
 /*
- * \param :
- * \descprt :
- * \return :
+ * \param : vector<Cell> b, the file containing board data
+ * \brief : convert the file data into cells class, filling the b vector
+ * \return : void
  */
 void Board::create_board(std::vector<Cell> b, std::string filename) {
     std::ifstream file(filename, std::ifstream::in);
@@ -180,9 +195,11 @@ void Board::create_board(std::vector<Cell> b, std::string filename) {
 }
 
 /*
- * \param :
- * \descprt :
- * \return :
+ * \param : vector<Player> p to be filled
+ * \brief : Fill the classes Player of the vector,
+ *          the vector passes in argument need to be initialized with empy classes Player
+ *          asking the name of the players, (and their skin ...plus tard ?...)
+ * \return : void
  */
 void Board::initialize_players(std::vector<Player> p) {
     int nbPlayers = command::nb_players();
@@ -197,9 +214,10 @@ void Board::initialize_players(std::vector<Player> p) {
 }
 
 /*
- * \param :
- * \descprt :
- * \return :
+ * \param : vector<Cell> b the board_game, vector<Player> p all the players
+ * \brief : PAS FINI faudrait redefinir les conditions de victoire
+ *           en fonction du mode ça pourrait etre cool
+ * \return : true if the game is over, false if not
  */
 bool Board::is_game_over(std::vector<Cell> b, std::vector<Player> p) {
     int count = 0;
@@ -207,5 +225,6 @@ bool Board::is_game_over(std::vector<Cell> b, std::vector<Player> p) {
         if (p[i].Buildings.size() == b.size()) return true;
         if (!p[i].Money) count++;
     }
+    if (count == p.size() - 1) return true;
     return false;
 }

@@ -7,7 +7,11 @@
 
 #include "command.hpp"
 
+#define MAX_CELL_RANK 10
+
 typedef enum {BUILDING, BONUS, JAIL} Type;
+typedef enum {FREE, IN_JAIL, VISIT} State_p;
+typedef enum {JAIL_FREE, TAXE_FREE};
 
 namespace Board {
     class Cell {
@@ -23,6 +27,7 @@ namespace Board {
 
             Cell(unsigned int pos, std::string name, Type t, int rank);
             bool upgrade();
+
     };
 
     class Player {
@@ -30,8 +35,10 @@ namespace Board {
             int Id;
             std::string Name;
             //int Color;
+            State_p Status;
             unsigned int Money = 2500;
             std::vector<Cell> Buildings;
+            unsigned int NbMonopole = 0;
             unsigned int Position = 0;
             unsigned int JailTime = 0;
             int Dice1, Dice2;
