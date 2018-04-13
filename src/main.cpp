@@ -1,15 +1,20 @@
+#include "command.hpp"
+#include "view.hpp"
 #include "model.hpp"
 using namespace Board;
 
 typedef enum {INIT, TURN, ACTION} State;
 
 int main(int argc, char** argv) {
+
     State game_state = INIT;
     std::string board_txt;
 
     std::vector<Cell> board_game;
     std::vector<Player> players;
     unsigned int turn;
+
+    Model_view View; View.init(board_game, player);
 
     while (!is_game_over(board_game, players)) {
         if (turn > players.size()) turn = 0;

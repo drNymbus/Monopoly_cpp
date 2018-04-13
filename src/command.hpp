@@ -3,7 +3,6 @@
 #include <iostream>
 #include <string>
 
-#include "view.hpp"
 #include "model.hpp"
 
 namespace command {

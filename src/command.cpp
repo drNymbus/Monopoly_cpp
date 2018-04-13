@@ -59,7 +59,7 @@ CardType command::pick_a_card(Player p) {
 			return GO_JAIL;
 		break;
 	}
-	std::cerr << "WHAT THE FUCK ???" << std::endl;
+	std::cerr << "I don't fucking care anymore" << std::endl;
 	exit(EXIT_FAILURE);
 }
 

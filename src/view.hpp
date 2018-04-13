@@ -1,12 +1,28 @@
-#include <SFML/Graphics.hpp>
+#ifndef SFML_MODULE
+#define SFML_MODULE
+    #include <SFML/System.hpp>
+    #include <SFML/Window.hpp>
+    #include <SFML/Graphics.hpp>
+#endif
 
 #include "model.hpp"
 
-namespace view {
-    typedef struct {
+#define SCREEN_WIDTH 1600
+#define SCREEN_HEIGHT 900
 
-    } Env_t;
-    void init(Env_t env);
+namespace view {
+    class Model_view {
+        private:
+            sf::Window w;
+            unsigned int width_menu, width_board;
+            void render_cell(Board::Cell c);
+            void render_cell_menu(Board::Cell c, bool exposed);
+
+        public:
+            void init(std::vector<Cell> b, std::vector<Player> p);
+            void render();
+            void clean();
+    }
 
     void message(std::string s);
     void yes_no(std::string yes, std::string no);

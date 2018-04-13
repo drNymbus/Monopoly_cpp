@@ -1,5 +1,6 @@
 CC = g++
 CFLAGS = -g -Wall -std=c++11
+CPPFLAGS = -lsfml-window -lsfml-system -lsfml-graphics
 
 SRC = $(wildcard src/*.c)
 OBJ = $(SRC:.c=obj/.o)
