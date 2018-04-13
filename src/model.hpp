@@ -5,13 +5,19 @@
 #include <string>
 #include <vector>
 
-#define MAX_CELL_RANK 10
+#ifndef MODEL
+#define MODEL
 
-typedef enum {BUILDING, BONUS, JAIL} Type;
-typedef enum {FREE, IN_JAIL, VISIT} StatePlayer;
+#define MAX_CELL_RANK 10
+typedef enum {BUILDING, BONUS, JAIL} Type_e;
+typedef Type_e Type;
+
+typedef enum {FREE, IN_JAIL, VISIT} StatePlayer_e;
+typedef StatePlayer_e StatePlayer;
 
 #define NB_CARD 3
-typedef enum {JAIL_FREE, TAX_FREE, GO_JAIL} CardType;
+typedef enum {JAIL_FREE, TAX_FREE, GO_JAIL} CardType_e;
+typedef CardType_e CardType;
 
 namespace Board {
     class Cell {
@@ -58,3 +64,5 @@ namespace Board {
     void initialize_players(std::vector<Player> p);
     bool is_game_over(std::vector<Cell> b, std::vector<Player> p);
 };
+
+#endif

@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
     std::vector<Player> players;
     unsigned int turn;
 
-    Model_view View; View.init(board_game, player);
+    view::Model_view View; View.init();
 
     while (!is_game_over(board_game, players)) {
         if (turn > players.size()) turn = 0;

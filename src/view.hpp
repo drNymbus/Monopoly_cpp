@@ -19,10 +19,10 @@ namespace view {
             void render_cell_menu(Board::Cell c, bool exposed);
 
         public:
-            void init(std::vector<Cell> b, std::vector<Player> p);
-            void render();
+            void init();
+            void render(std::vector<Board::Cell> b, std::vector<Board::Player> p);
             void clean();
-    }
+    };
 
     void message(std::string s);
     void yes_no(std::string yes, std::string no);
