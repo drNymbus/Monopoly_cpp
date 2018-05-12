@@ -25,4 +25,5 @@ namespace command {
 
 	void upgrade(Board::Player, Controler c);
 	void mortgage(Board::Cell c);
+	void get_user_input(sf::Event event);
 }

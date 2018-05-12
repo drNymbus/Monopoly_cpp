@@ -7,6 +7,7 @@
 
 #ifndef MODEL
 #define MODEL
+#include "s_list.hpp"
 
 #define MAX_CELL_RANK 10
 typedef enum {BUILDING, BONUS, JAIL} Type_e;
@@ -22,7 +23,7 @@ typedef CardType_e CardType;
 namespace Board {
     class Cell {
         public:
-            unsigned int Position;
+            int Id;
             Type CellType;
             int Rank;
             std::string Name;
@@ -31,7 +32,7 @@ namespace Board {
             bool bMortgage = false;
             unsigned int Rebuy;
 
-            Cell(unsigned int pos, std::string name, Type t, int rank);
+            Cell(int id, std::string name, Type t, int rank, bool is_last);
             bool upgrade();
 
     };
@@ -58,11 +59,10 @@ namespace Board {
             bool do_possess(Cell c);
     };
 
-    Cell str_to_cell(std::string str);
+    Cell* str_to_cell(std::string str);
+    sl::SList<Cell>* create_properties(std::string filename);
     void shuffle_players(std::vector<Player> p);
-    void create_board(std::vector<Cell> b, std::string filename);
-    void initialize_players(std::vector<Player> p);
-    bool is_game_over(std::vector<Cell> b, std::vector<Player> p);
+    bool is_game_over(sl::SList<Cell>* b, std::vector<Player> p);
 };
 
 #endif

@@ -1,6 +1,5 @@
 #include "command.hpp"
 #include "model.hpp"
-using namespace command;
 using namespace Board;
 
 /*
@@ -32,8 +31,7 @@ void command::initialize_players(std::vector<Player> p) {
  * \brief :
  * \return :
  */
-CardType command::pick_a_card(Player p) {
-}
+CardType command::pick_a_card(Player p);
 
 /*
  *\param :
@@ -86,3 +84,12 @@ void command::go_to_jail(Player p, std::vector<Cell> b);
  * \return :
  */
 void command::out_of_prison(Player p);
+
+void command::get_user_input(sf::Event event) {
+    if (event.type == sf::Event::TextEntered) {
+        // Handle ASCII characters only
+        // if (event.Text.Unicode < 128) {
+            std::cout << static_cast<char>(event.text.unicode) << std::endl;
+        // }
+    }
+}

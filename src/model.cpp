@@ -8,13 +8,13 @@ using namespace Board;
  * \brief : Cell class constructor. no comment.
  * \return :
  */
-Cell::Cell(unsigned int pos, std::string name, Type t, int rank) {
-    Cell::Position = pos;
+Cell::Cell(int id, std::string name, Type t, int rank, bool is_last) {
+    Cell::Id       = id;
     Cell::Name     = name;
     Cell::CellType = t;
     Cell::Rank     = rank;
     if (t == BUILDING){
-        Cell::Value     = ((pos%5 > 3 || pos%5 < 1) ? 50 : 0) + 100*rank;
+        Cell::Value     = 60 + (40*rank) + ( is_last ? 20 : 0);
         Cell::vMortgage = Cell::Value - Cell::Value/8;
         Cell::Rebuy     = Cell::vMortgage + Cell::vMortgage/10;
     }
@@ -97,7 +97,7 @@ bool Player::pay(Player p, int sum) {
 bool Player::do_possess(Cell c) {
     std::vector<Cell>::iterator i = Player::Buildings.begin();
     while (i != Player::Buildings.end()) {
-        if ((*i).Position == c.Position) return true;
+        if ((*i).Id == c.Id) return true;
         i++;
     }
     return false;
@@ -129,19 +129,25 @@ void Player::buy(Cell c) {
 
 /*
  * \param : String s containing data cell
- *          string scheme : CELL_POS CELL_NAME CELL_TYPE CELL_RANK
+ *          string scheme : CELL_ID CELL_NAME CELL_TYPE CELL_RANK
+ *          if the property is the last of this rank then put LAST
+ *          at the end of the string scheme
+ *          replace all spaces by _ (those will not appear in rendering)
  * \brief : convert the data cell string into a cell class
  * \return : the cell created from the string
  */
- Cell Board::str_to_cell(std::string str) {
-    int i = 0;
-    unsigned int pos, t, rank;
+ Cell* Board::str_to_cell(std::string str) {
+    int i = 0, id = 0;
+    unsigned int t, rank;
     std::string name;
+    bool is_last = false;
+
     std::istringstream words(str);
     do {
         std::string word; words >> word;
+        std::cout << word << ' ';
         if (i == 0) {
-            pos = stoi(word);
+            id = stoi(word);
             i++;
         } else if (i == 1) {
             name = word;
@@ -152,18 +158,47 @@ void Player::buy(Cell c) {
         } else if (i == 3) {
             rank = stoi(word);
             i++;
+        } else if (i == 4) {
+            is_last = true;
+            i++;
         } else {
             std::cout << "Out of bound !!!" << std::endl;
         }
     } while (words);
-    return Cell(pos, name,(Type) t, rank);
+    std::cout << std::endl;
+    Cell* c = new Cell(id, name,(Type) t, rank, is_last);
+    return c;
 }
 
 /*
- * \param : vector<Player> p to shuffle
- * \brief : reaffecting the position of the class player in the vector randomly
+ * \param : vector<Cell> b, the file containing board data
+ * \brief : convert the file data into cells class, filling the b vector
  * \return : void
  */
+ sl::SList<Cell>* Board::create_properties(std::string filename) {
+    sl::SList<Cell>* properties = sl::create_list<Cell>();
+    int id = 0;
+
+    std::ifstream file(filename, std::ifstream::in);
+    std::string line;
+    if (file.is_open()) {
+        while(getline(file, line)) {
+            Cell* property = str_to_cell(line);
+            property->Id = id;
+            properties = sl::append(properties, property);
+        }
+    } else {
+        std::cout << "File: " << filename << " cannot open file.";
+    }
+
+    return properties;
+}
+
+/*
+* \param : vector<Player> p to shuffle
+* \brief : reaffecting the position of the class player in the vector randomly
+* \return : void
+*/
 void Board::shuffle_players(std::vector<Player> p) {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -177,33 +212,17 @@ void Board::shuffle_players(std::vector<Player> p) {
 }
 
 /*
- * \param : vector<Cell> b, the file containing board data
- * \brief : convert the file data into cells class, filling the b vector
- * \return : void
- */
-void Board::create_board(std::vector<Cell> b, std::string filename) {
-    std::ifstream file(filename, std::ifstream::in);
-    std::string line;
-    if (file.is_open()) {
-        while(getline(file, line)) {
-            Cell tmp = str_to_cell(line);
-            b.push_back(tmp);
-        }
-    } else {
-        std::cout << "File: " << filename << " cannot open file.";
-    }
-}
-
-/*
  * \param : vector<Cell> b the board_game, vector<Player> p all the players
- * \brief : PAS FINI faudrait redefinir les conditions de victoire
+ * \brief :  Si qlqun possède tout les bâtiments,
+ *           ou tous les joueurs ont fait faillite sauf un
+ *           PAS FINI faudrait redefinir les conditions de victoire
  *           en fonction du mode ça pourrait etre cool
  * \return : true if the game is over, false if not
  */
-bool Board::is_game_over(std::vector<Cell> b, std::vector<Player> p) {
-    int count = 0;
+bool Board::is_game_over(sl::SList<Cell>* b, std::vector<Player> p) {
+    unsigned int count = 0;
     for (unsigned int i = 0; i < p.size(); i++) {
-        if (p[i].Buildings.size() == b.size()) return true;
+        if (p[i].Buildings.size() == sl::size(b)) return true;
         if (!p[i].Money) count++;
     }
     if (count == p.size() - 1) return true;
