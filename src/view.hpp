@@ -5,14 +5,5 @@
     #include <SFML/Graphics.hpp>
 #endif
 
-#include "model.hpp"
-
-#define SCREEN_WIDTH 1600
-#define SCREEN_HEIGHT 900
-
-namespace view {
-    class Model_view {
-        private:
-            sf::Window w;
-        };
-}
+class Model_view {
+};

@@ -49,13 +49,21 @@ namespace sl {
  * \return:
  */
     template <typename T> void free_list(SList<T>* l) {
-        SList<T>* p = l;
-        while (p->next != nullptr) {
-            SList<T>* tmp = p->next;
+        try {
+            SList<T>* p = l;
+            while (p->next != nullptr) {
+                delete p->data;
+                SList<T>* tmp = p->next;
+                delete p;
+                p = tmp;
+            }
             delete p;
-            p = tmp;
+        } catch (std::exception const& e) {
+            std::cerr << "(sl::free_list()) Exception caught :" << std::endl;
+            std::cerr << "\t" << e.what() << std::endl;
+        } catch (...) {
+            std::cerr << "(sl::free_list()) Unknown error." << std::endl;
         }
-        delete p;
     }
 
 /*

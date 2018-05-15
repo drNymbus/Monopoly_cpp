@@ -18,7 +18,7 @@ $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 Monopoly : $(OBJECTS)
-	$(CC) $(CFLAGS) $(OBJECTS) -o Monopoly
+	$(CC) $(CFLAGS) $(OBJECTS) -o Monopoly $(CPPFLAGS)
 
 .PHONY: clean
 clean:

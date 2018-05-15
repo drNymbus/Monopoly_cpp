@@ -25,6 +25,18 @@ Cell::Cell(int id, std::string name, Type t, int rank, bool is_last) {
  * \brief : upgrade the cell
  * \return : returns true if the cell has been upgraded, false otherwise
  */
+void Cell::fix_name(void) {
+    std::string::iterator i = Cell::Name.begin();
+    for (; i != Cell::Name.end(); i++) {
+        if ((*i) == '_') (*i) = ' ';
+    }
+}
+
+/*
+ * \param : void
+ * \brief : upgrade the cell
+ * \return : returns true if the cell has been upgraded, false otherwise
+ */
 bool Cell::upgrade(void) {
     if (Cell::Level+1 > 3) return false;
     Cell::Level++;
@@ -136,7 +148,7 @@ void Player::buy(Cell c) {
  * \brief : convert the data cell string into a cell class
  * \return : the cell created from the string
  */
- Cell* Board::str_to_cell(std::string str) {
+ Cell* Board::str_to_cell(std::string str, unsigned int line) {
     int i = 0, id = 0;
     unsigned int t, rank;
     std::string name;
@@ -145,28 +157,43 @@ void Player::buy(Cell c) {
     std::istringstream words(str);
     do {
         std::string word; words >> word;
-        std::cout << word << ' ';
-        if (i == 0) {
-            id = stoi(word);
-            i++;
-        } else if (i == 1) {
+        // std::cout << word << ' ';
+        // std::cout << word << "| "<< i << std::endl;
+        if (i == 1) {
             name = word;
-            i++;
-        } else if (i == 2) {
-            t = stoi(word);
-            i++;
-        } else if (i == 3) {
-            rank = stoi(word);
             i++;
         } else if (i == 4) {
             is_last = true;
             i++;
         } else {
-            std::cout << "Out of bound !!!" << std::endl;
+            try {
+                if (i == 0) {
+                    id = stoi(word);
+                    i++;
+                } else if (i == 2) {
+                    t = stoi(word);
+                    i++;
+                } else if (i == 3) {
+                    rank = stoi(word);
+                    i++;
+                }
+            } catch (std::exception const &e) {
+                std::cerr << "Incorrect parameter LINE " << line << std::endl;
+                std::cerr << "\t\"" << word << '\"' << ": is incorrect !" << i <<std::endl;
+                std::cerr << "Error : " << e.what() << std::endl;
+                exit(EXIT_FAILURE);
+            } catch (...) {
+                std::cerr << "Incorrect parameter LINE " << line << std::endl;
+                std::cerr << "\t\"" << word << '\"' << ": is incorrect !" << i <<std::endl;
+                std::cerr << "Unknown error" << std::endl;
+                exit(EXIT_FAILURE);
+            }
         }
     } while (words);
-    std::cout << std::endl;
+    // std::cout << std::endl;
+
     Cell* c = new Cell(id, name,(Type) t, rank, is_last);
+    c->fix_name();
     return c;
 }
 
@@ -179,11 +206,12 @@ void Player::buy(Cell c) {
     sl::SList<Cell>* properties = sl::create_list<Cell>();
     int id = 0;
 
+    unsigned int i_line = 0;
     std::ifstream file(filename, std::ifstream::in);
     std::string line;
     if (file.is_open()) {
         while(getline(file, line)) {
-            Cell* property = str_to_cell(line);
+            Cell* property = str_to_cell(line, i_line);
             property->Id = id;
             properties = sl::append(properties, property);
         }

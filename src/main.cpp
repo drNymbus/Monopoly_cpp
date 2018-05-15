@@ -1,9 +1,8 @@
-#include "command.hpp"
-#include "view.hpp"
-#include "model.hpp"
-using namespace Board;
+// #include "command.hpp"
+// #include "view.hpp"
+// #include "model.hpp"
 
-typedef enum {INIT, TURN, ACTION} State;
+#include "app.hpp"
 
 void usage(void) {
     fprintf(stderr, "%s\n", "Command is incorrect.");
@@ -14,37 +13,28 @@ void usage(void) {
 }
 
 int main(int argc, char** argv) {
-    try
-    {
-        std::string board_file;
-        if (argc > 2) {
-            usage();
-        } else if (argc == 1) {
-            board_file = "maps/Original.txt";
-        } else if (argc == 2) {
-            board_file = argv[1];
+    sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH,SCREEN_HEIGHT),APP_NAME);
+
+    App* monopoly = new App();
+    (*monopoly).OnCreate(&window);
+    while (monopoly->Window->isOpen()) {
+        if (!(*monopoly).IsGameOver()) {
+            (*monopoly).Tick();
         }
-
-        // State game_state = INIT;
-
-        sl::SList<Cell>* properties = Board::create_properties(board_file);
-        // std::vector<Player> players;
-
-        // view::Model_view View; View.init();
-
-        // while (!is_game_over(board_game, players)) {
-        //
-        // }
-
-        sl::free_list(properties);
-        return EXIT_SUCCESS;
     }
-    catch (std::exception const &exc)
-    {
-        std::cerr << "Exception caught " << exc.what() << "\n";
-    }
-    catch (...)
-    {
-        std::cerr << "Unknown exception caught\n";
-    }
+
+    // do {
+    //     monopoly.GetEvent();
+    //     while (monopoly.GameState != Board::WIN && monopoly.GameState != Board::WIN) {
+    //         if (!(monopoly.Tick();)) {
+    //             break;
+    //         }
+    //     }
+    // } while (monopoly.ActualEvent.type != sf::Event::Closed)
+
+    (*monopoly).EndApp();
+    delete monopoly;
+
+    std::cout << "BRAVO VICTOR !" << std::endl;
+    return EXIT_SUCCESS;
 }

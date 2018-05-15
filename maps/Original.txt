@@ -1,37 +1,22 @@
-Brown_(Dark_Purple)
 0 Mediterranean_Avenue 0 0
 1 Baltic_Avenue 0 0
-
-Light_Blue
 2 Oriental_Avenue 0 1
 3 Vermont_Avenue 0 1
 4 Connecticut_Avenue 0 1 LAST
-
-Pink
 5 St._Charles_Place 0 2
 6 States_Avenue 0 2
 7 Virginia_Avenue 0 2 LAST
-
-Orange
 8  St._James_Place 0 3
 9  Tennessee_Avenue 0 3
 10 New_York_Avenue 0 3 LAST
-
-Red
 11 Kentucky_Avenue 0 4
 12 Indiana_Avenue 0 4
 13 Illinois_Avenue 0 4 LAST
-
-Yellow
 14 Atlantic_Avenue 0 5
 15 Ventnor_Avenue 0 5
 16 Marvin_Gardens 0 5 LAST
-
-Green
 17 Pacific_Avenue 0 6
 18 North_Carolina_Avenue 0 6
 19 Pennsylvania_Avenue 0 6 LAST
-
-Dark_Blue
 20 Park_Place 0 7
 21 Boardwalk 0 7 LAST

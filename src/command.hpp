@@ -1,29 +1,19 @@
-#include <SFML/Window.hpp>
+#ifndef SFML_MODULE
+#define SFML_MODULE
+    #include <SFML/System.hpp>
+    #include <SFML/Window.hpp>
+    #include <SFML/Graphics.hpp>
+#endif
 
-#include <iostream>
-#include <string>
+class Controller {
 
-#include "model.hpp"
+	public:
+		sf::Event ActualEvent;
+		sf::Keyboard Keyboard;
+		sf::Mouse Mouse;
 
-namespace command {
-	class Controler {};
-	Board::Cell mouse_cell_pos();
-
-	unsigned int ask_number(std::vector<int> value);
-	bool ask_key_press();
-	int ask_yes_no(std::string s_yes, std::string s_no);
-
-	void initialize_players(std::vector<Board::Player> p);
-	void cell_management(Board::Player p, Controler c);
-
-	void roll_dice(Board::Player p);
-	void out_of_prison(Board::Player p);
-
-	CardType pick_a_card(Board::Player p);
-	void pay_taxes(Board::Player p);
-	void go_to_jail(Board::Player p, std::vector<Board::Cell> b);
-
-	void upgrade(Board::Player, Controler c);
-	void mortgage(Board::Cell c);
-	void get_user_input(sf::Event event);
-}
+		void get_event(sf::RenderWindow* w);
+		void select_nb_players();
+		sf::String get_user_name(unsigned int end_k);
+		bool wait_action(unsigned int end_k);
+};
