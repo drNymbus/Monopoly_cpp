@@ -59,10 +59,6 @@ namespace Board {
             bool do_possess(Cell c);
     };
 
-    Cell* str_to_cell(std::string str, unsigned int line);
-    sl::SList<Cell>* create_properties(std::string filename);
-    void shuffle_players(std::vector<Player> p);
-    bool is_game_over(sl::SList<Cell>* b, std::vector<Player> p);
 };
 
 #endif

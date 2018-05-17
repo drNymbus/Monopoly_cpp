@@ -5,15 +5,41 @@
     #include <SFML/Graphics.hpp>
 #endif
 
-class Controller {
+#ifndef CONTROL_H
+#define CONTROL_H
 
-	public:
-		sf::Event ActualEvent;
-		sf::Keyboard Keyboard;
-		sf::Mouse Mouse;
+namespace command {
+        /*
+         * \param :
+         * \brief :
+         * \return:
+         * DONE
+         */
+        static bool wait_action(sf::Event e, sf::Keyboard::Key end_k);
+        static bool wait_action(sf::Event e, sf::Mouse::Button end_k, sf::Vector2i top_corner, sf::Vector2i bot_corner);
 
-		void get_event(sf::RenderWindow* w);
-		void select_nb_players();
-		sf::String get_user_name(unsigned int end_k);
-		bool wait_action(unsigned int end_k);
-};
+        /*
+         * \param :
+         * \brief :
+         * \return:
+         * DONE
+         */
+        static bool get_user_name(sf::Event e, sf::Keyboard::Key end_k, std::string* name);
+        static bool get_user_name(sf::Event e, sf::Mouse::Button end_k, sf::Vector2i top_corner, sf::Vector2i bot_corner, std::string* name);
+
+        /*
+         * \param :
+         * \brief :
+         * \return:
+         */
+        // bool select_board(std::string* n);
+
+        /*
+         * \param :
+         * \brief :
+         * \return:
+         */
+        // bool command::select_nb_players(int* n);
+}
+
+#endif

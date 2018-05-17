@@ -18,8 +18,10 @@ int main(int argc, char** argv) {
     App* monopoly = new App();
     (*monopoly).OnCreate(&window);
     while (monopoly->Window->isOpen()) {
+        sf::Event event;
+        monopoly->Window->pollEvent(event);
         if (!(*monopoly).IsGameOver()) {
-            (*monopoly).Tick();
+            (*monopoly).Tick(event);
         }
     }
 

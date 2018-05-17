@@ -16,29 +16,36 @@
 typedef enum {MENU, BEGIN, ROLL, MOVE, ACTION, WIN, PAUSE, END} GameState_e;
 typedef GameState_e GameState;
 
-typedef enum {SELECT_NB, GET_NAMES, SELECT_BOARD} MenuState_e;
+typedef enum {SELECT_NB, GET_NAMES, COLOR, SELECT_BOARD, OVER} MenuState_e;
 typedef MenuState_e MenuState;
 
 class App {
 public:
-    Controller* Control;
-    Model_view* View;
-    std::vector<Board::Player> Players;
-    sl::SList<Board::Cell>* Properties;
-
-    sf::RenderWindow* Window;
     GameState gState;
     MenuState mState;
+    unsigned int iTurn;
 
-    void OnCreate(sf::RenderWindow* w);
-    void EndApp(void);
-    void Tick(void);
+    unsigned int NbPlayers;
+    std::vector<Board::Player> Players;
+    std::string MapName;
+    sl::SList<Board::Cell>* Properties;
+
+    Model_view* View;
+    sf::RenderWindow* Window;
+
+    void OnCreate(sf::RenderWindow* w); //DONE
+    void EndApp(void); //DONE
+    void Tick(sf::Event e); //MENU DONE
     bool IsGameOver(void);
 
 private:
+    bool LoadMap(std::string filename);
     bool Pause(void);
     void Win(void);
     void Menu(void);
+    bool SelectColor();
+    bool SelectNbPlayers();
+    void ShufflePlayers();
     void BeginGame(void);
     void Turn(void);
     void Next(void);
