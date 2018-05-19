@@ -10,8 +10,8 @@
 #include "view.hpp"
 
 #define APP_NAME "Monopoly"
-#define SCREEN_HEIGHT 600
-#define SCREEN_WIDTH 400
+#define SCREEN_WIDTH 1600
+#define SCREEN_HEIGHT 900
 
 typedef enum {MENU, BEGIN, ROLL, MOVE, ACTION, WIN, PAUSE, END} GameState_e;
 typedef GameState_e GameState;
@@ -30,12 +30,13 @@ public:
     std::string MapName;
     sl::SList<Board::Cell>* Properties;
 
+    sf::Window* Window;
     Model_view* View;
-    sf::RenderWindow* Window;
+    Controller Control;
 
-    void OnCreate(sf::RenderWindow* w); //DONE
+    void OnCreate(); //DONE
     void EndApp(void); //DONE
-    void Tick(sf::Event e); //MENU DONE
+    void Tick(); //MENU DONE
     bool IsGameOver(void);
 
 private:

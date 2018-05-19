@@ -6,18 +6,55 @@
  * \brief :
  * \return:
  */
-// void App::Menu(void) {
-//     App::Control->select_nb_players(App::Window);
-//     App::View->select_nb_players(App::Control);
-// }
+void App::Menu(void) {
+    switch (App::mState) {
+        case SELECT_NB:
+            // std::cout << "SELECT_NB\n";
+            if (App::SelectNbPlayers()) {
+                // App::mState = GET_NAMES;
+                App::iTurn  = 0;
+            }
+        break;
+        // case GET_NAMES:
+        //     if (App::Control.get_user_name(e, sf::Keyboard::Return, &(App::Players[App::iTurn].Name))) {
+        //         App::iTurn++;
+        //         if (iTurn == NbPlayers) {
+        //             App::iTurn = 0;
+        //             App::mState = COLOR;
+        //         }
+        //     }
+        // break;
+        // case COLOR:
+        //     if (App::SelectColor()) {
+        //         App::iTurn++;
+        //         if (App::iTurn == App::NbPlayers) {
+        //             App::iTurn = 0;
+        //             App::mState = SELECT_BOARD;
+        //         }
+        //     }
+        // break;
+        // case SELECT_BOARD:
+        //     if (App::Control.select_board(&(App::MapName))) {
+        //         App::LoadMap(App::MapName);
+        //         App::mState = OVER;
+        //         App::gState = BEGIN;
+        //     }
+        // break;
+        default:
+            // std::cerr << "YOU SHOULDN'T BE HERE" << std::endl;
+            // std::cerr << "GO AWAY ! STOP HACKING !" << std::endl;
+        break;
+    }
+}
 
 // void BeginGame(void);
 // void Turn(void);
 // void Next(void);
 
-void App::OnCreate(sf::RenderWindow* w) {
+void App::OnCreate() {
     try {
-        App::Window = w;
+        App::Window = new sf::Window();
+        App::Window->create(sf::VideoMode(SCREEN_WIDTH,SCREEN_HEIGHT),APP_NAME);
         App::View = new Model_view();
 
         App::gState = MENU;
@@ -39,46 +76,15 @@ void App::EndApp(void) {
     } catch (...) {std::cerr << "Unknown error on EndApp\n";}
 }
 
-void App::Tick(sf::Event e) {
-    if (e.type == sf::Event::Closed) {
-        App::Window->close();
-    } else if (App::gState == MENU){
-        switch (App::mState) {
-            case SELECT_NB:
-                if (App::SelectNbPlayers()) {
-                    App::mState = GET_NAMES;
-                    App::iTurn  = 0;
-                }
-            break;
-            // case GET_NAMES:
-            //     if (command::get_user_name(e, sf::Keyboard::Return, &(App::Players[App::iTurn].Name))) {
-            //         App::iTurn++;
-            //         if (iTurn == NbPlayers) {
-            //             App::iTurn = 0;
-            //             App::mState = COLOR;
-            //         }
-            //     }
-            // break;
-            // case COLOR:
-            //     if (App::SelectColor()) {
-            //         App::iTurn++;
-            //         if (App::iTurn == App::NbPlayers) {
-            //             App::iTurn = 0;
-            //             App::mState = SELECT_BOARD;
-            //         }
-            //     }
-            // break;
-            // case SELECT_BOARD:
-            //     if (command::select_board(&(App::MapName))) {
-            //         App::LoadMap(App::MapName);
-            //         App::mState = OVER;
-            //         App::gState = BEGIN;
-            //     }
-            // break;
-            default:
-                std::cerr << "YOU SHOULDN'T BE HERE" << std::endl;
-                std::cerr << "GO AWAY ! STOP HACKING !" << std::endl;
-            break;
+void App::Tick() {
+
+    while (App::Window->pollEvent(App::Control.Event)) {
+        if (App::Control.Event.type == sf::Event::Closed) {
+            std::cout << "Event CLOSED\n";
+            App::Window->close();
+        }
+        if (App::gState == MENU){
+            App::Menu();
         }
     }
     // App::View->Tick();
@@ -94,12 +100,12 @@ void App::Tick(sf::Event e) {
  * \return : true if the game is over, false if not
  */
 bool App::IsGameOver(void) {
-    unsigned int count = 0;
-    for (unsigned int i = 0; i < App::NbPlayers; i++) {
-        if (App::Players[i].Buildings.size() == sl::size(App::Properties)) return true;
-        if (!App::Players[i].Money) count++;
-    }
-    if (count == (App::NbPlayers-1) - 1) return true;
+    // unsigned int count = 0;
+    // for (unsigned int i = 0; i < App::NbPlayers; i++) {
+    //     if (App::Players[i].Buildings.size() == sl::size(App::Properties)) return true;
+    //     if (!App::Players[i].Money) count++;
+    // }
+    // if (count == (App::NbPlayers-1) - 1) return true;
     return false;
 }
 
@@ -209,6 +215,10 @@ void App::ShufflePlayers() {
 }
 
 bool App::SelectNbPlayers() {
-    App::NbPlayers = 1;
-    return true;
+    int s[] = {2,3,4,5,6};
+    if (App::Control.wait_user_action(sf::Mouse::Left)) {
+        App::NbPlayers = App::Control.select_value(App::Window, s, 5);
+        if (App::NbPlayers != 0) return true;
+    }
+    return false;
 }

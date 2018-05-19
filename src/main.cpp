@@ -13,26 +13,17 @@ void usage(void) {
 }
 
 int main(int argc, char** argv) {
-    sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH,SCREEN_HEIGHT),APP_NAME);
-
     App* monopoly = new App();
-    (*monopoly).OnCreate(&window);
+    (*monopoly).OnCreate();
+    std::cout << "App created...\n";
+
     while (monopoly->Window->isOpen()) {
-        sf::Event event;
-        monopoly->Window->pollEvent(event);
+        // std::cout << "Window is open\n";
         if (!(*monopoly).IsGameOver()) {
-            (*monopoly).Tick(event);
+            // std::cout << "Game not over\n";
+            (*monopoly).Tick();
         }
     }
-
-    // do {
-    //     monopoly.GetEvent();
-    //     while (monopoly.GameState != Board::WIN && monopoly.GameState != Board::WIN) {
-    //         if (!(monopoly.Tick();)) {
-    //             break;
-    //         }
-    //     }
-    // } while (monopoly.ActualEvent.type != sf::Event::Closed)
 
     (*monopoly).EndApp();
     delete monopoly;
