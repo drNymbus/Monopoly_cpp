@@ -11,14 +11,15 @@ OBJDIR   = obj
 all : Monopoly
 
 SOURCES  := $(wildcard $(SRCDIR)/*.cpp)
-INCLUDES := $(wildcard $(SRCDIR)/*.hpp)
+#INCLUDES := $(wildcard $(SRCDIR)/*.hpp)
 OBJECTS  := $(SOURCES:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
+#main.o: main.cpp app.hpp
 Monopoly : $(OBJECTS)
-	$(CC) $(CFLAGS) $(OBJECTS) -o Monopoly
+	$(CC) $(CFLAGS) $(OBJECTS) -o Monopoly $(CPPFLAGS)
 
 .PHONY: clean
 clean:
